@@ -122,16 +122,16 @@ AUTH_USER_MODEL = 'app.Instructor' #swaps Instructor with the default user model
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "Timetable MIS",
+    "site_title": "TUM Timetable System",
 
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "Timetable MIS",
+    "site_header": "TUM Timetable System",
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_brand": "Timetable MIS",
+    "site_brand": "TUM Timetable System",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
-    "site_logo": "books/img/logo.png",
+    # "site_logo": "",
 
     # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
     "login_logo": None,
@@ -146,10 +146,10 @@ JAZZMIN_SETTINGS = {
     "site_icon": None,
 
     # Welcome text on the login screen
-    "welcome_sign": "Welcome to the library",
+    # "welcome_sign": "Welcome to the library",
 
     # Copyright on the footer
-    "copyright": "Acme Library Ltd",
+    "copyright": "TUM",
 
     # List of model admins to search from the search bar, search bar omitted if excluded
     # If you want to use a single search field you dont need to use a list, you can use a simple string 
@@ -175,7 +175,7 @@ JAZZMIN_SETTINGS = {
         {"model": "auth.User"},
 
         # App with dropdown menu to all its models pages (Permissions checked against models)
-        {"app": "books"},
+        # {"app": "books"},
     ],
 
     #############

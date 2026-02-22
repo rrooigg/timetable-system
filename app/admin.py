@@ -8,9 +8,10 @@ from django.utils.html import format_html
 
 #Register Department
 class DepartmentAdmin(admin.ModelAdmin):
+  actions=None
   list_display = ("DepartmentName", "HeadOfDepartment","registered_date_badge")
-  list_filter = ("HeadOfDepartment", "RegisteredDate")
-  search_fields = ("DepartmentName", "HeadOfDepartment")
+  # list_filter = ("HeadOfDepartment", "RegisteredDate")
+  # search_fields = ("DepartmentName", "HeadOfDepartment")
   date_hierarchy = "RegisteredDate"
   list_editable = ("HeadOfDepartment",) #, -> shows it's a tuple and not a string
   list_per_page=10
@@ -23,9 +24,10 @@ admin.site.register(Department, DepartmentAdmin)
 
 #Register Instructor
 class InstructorAdmin(admin.ModelAdmin):
+  actions=None
   list_display =("username", "FirstName", "LastName", "MiddleName", "email", "Department", "registered_date_badge")
-  list_filter = ("Department", "RegisteredDate")
-  search_fields = ("username", "email")
+  # list_filter = ("Department", "RegisteredDate")
+  # search_fields = ("username", "email")
   list_per_page=10
   list_max_show_all=10
   list_editable = ("FirstName", "LastName", "MiddleName", "email", "Department",)
@@ -54,9 +56,10 @@ admin.site.register(Instructor, InstructorAdmin)
 
 #Register TimetableMain
 class TimeTableMainAdmin(admin.ModelAdmin):
+  actions=None
   list_display =("YearOfStudy", "Programme", "Semester", "Department", "registered_date_badge")
-  list_filter = ("YearOfStudy", "Semester", "Department", "RegisteredDate")
-  search_fields = ("YearOfStudy", "Programme", "Semester")
+  # list_filter = ("YearOfStudy", "Semester", "Department", "RegisteredDate")
+  # search_fields = ("YearOfStudy", "Programme", "Semester")
   date_hierarchy= "RegisteredDate"
   list_per_page=10
   list_max_show_all=10
@@ -82,10 +85,11 @@ class TimeTableForm(forms.ModelForm):
 
 #Register Timetable Admin
 class TimeTableAdmin(admin.ModelAdmin):
+  actions=None
   form = TimeTableForm
   list_display =("id", "Day", "courseName", "venue", "TimeStart", "TimeEnd", "programme", "registered_date_badge")
-  list_filter = ("Day", "programme", "RegisteredDate")
-  search_fields = ("courseName", "venue")
+  # list_filter = ("Day", "programme", "RegisteredDate")
+  # search_fields = ("courseName", "venue")
   date_hierarchy= "RegisteredDate"
   list_per_page=5
   list_max_show_all=5
@@ -99,11 +103,14 @@ admin.site.register(Timetable, TimeTableAdmin)
 #Register Course
 @admin.register(CourseName)
 class CourseNameAdmin(admin.ModelAdmin):
+  actions=None
   list_display =("CourseCode", "CourseDescription", "Course")
-  search_fields = ("Course", "CourseCode", "CourseDescription")
+  # search_fields = ("Course", "CourseCode", "CourseDescription")
   list_per_page=10
   list_max_show_all=10
   list_editable=("Course", "CourseDescription",)
 
 #Register Venue
-admin.site.register(Venue)
+class VenueAdmin(admin.ModelAdmin):
+  actions=None
+admin.site.register(Venue, VenueAdmin)
