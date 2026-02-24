@@ -5,6 +5,6 @@ from django.urls import path, include
 
 urlpatterns = [
   path('', views.index, name='index'),
-  #path('support/', views.support, name='support'),
+  path('export-pdf/', views.export_timetable_pdf, name='export_pdf'),
 
 ]

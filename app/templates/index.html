@@ -1,1 +1,113 @@
-<h1>bra bra bra</h1>
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% block main %}
+
+<div class="container">
+  <div class="card card-outline border-secondary p-2">
+    <div class="card-body">
+      <h4 class="text-info">Select Programmer, Semester and Year Of Study</h4>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="programme">Programme</label>
+          <select name="programme" id="programme" class="form-control" required>
+            <option value="" disabled selected>Select Programme</option>
+            {% for programme in programmes %}
+              <option>{{ programme }}</option>
+            {% endfor %}
+          </select>
+
+        </div>
+        <div class="form-group">
+          <label for="semester">Semester</label>
+          <select name="semester" id="semester" class="form-control" required>
+            <option value="" disabled selected>Semester</option>
+            {% for semester in semesters %}
+              <option>{{ semester }}</option>
+            {% endfor %}
+          </select>
+
+        </div>
+          <div class="form-group">
+          <label for="year_of_study">Year Of Study</label>
+          <select name="year_of_study" id="year_of_study" class="form-control" required>
+            <option value="" disabled selected>Year Of Study</option>
+            {% for year_of_study in years_of_study %}
+              <option>{{ year_of_study }}</option>
+            {% endfor %}
+          </select>
+
+        </div>
+        <button type="submit" class="btn btn-dark mt-3">Search</button>
+      </form>
+
+    </div>
+
+  </div>
+  <style>
+    #card{
+      overflow: auto;
+      width: 100%;
+    }
+    #today-table{
+      overflow: auto;
+      width: 100%;
+    }
+  </style>
+
+  <!--Button to download button-->
+  {% if timetable_data %}
+    <div class="mb-3">
+      <a href="{% url 'export_pdf' %}?programme={{ selected_programme }}&semester={{ semester }}&year_of_study={{ year_of_study }}" 
+        class="btn btn-success">
+        <i class="fas fa-file-download"></i> Download PDF
+      </a>
+    </div>
+  {% endif %}
+
+  <table id="today_table" class="table table-bordered border table-hover w-100 text-dark">
+    <thead>
+      <tr>
+        <th colspan="10">Days:
+          {% for day in timetable_data %}
+            {{ day }}
+          {% endfor %}
+        </th>
+      </tr>
+      <tr>
+        <th>Day</th>
+        <th>Course Name</th>
+        <th>Course Code</th>
+        <th>Instructor</th>
+        <th>Venue</th>
+        <th>Time Start</th>
+        <th>Time End</th>
+        <th colspan="2">Course Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for day, entries in timetable_data.items %}
+      {% for entry in entries %}
+        <tr>
+          {% if forloop.first %}
+          <td rowspan="{{ entries|length }}"><span class="badge badge-dark p-2 text-white">{{day}}</span></td>
+          {% endif %}
+          <td>{{ entry.courseName.Course}}</td>
+          <td>{{ entry.courseName.CourseCode}}</td>
+          <td>{{ entry.instructor.username}}</td>
+          <td>{{ entry.venue}}</td>
+          <td>{{ entry.TimeStart}}</td>
+          <td>{{ entry.TimeEnd}}</td>
+          <td>{{ entry.courseName.CourseDescription }}</td>
+        </tr>
+      {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+{% endblock %}
+{% endblock %}

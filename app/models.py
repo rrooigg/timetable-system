@@ -21,7 +21,7 @@ class Department(models.Model):
     verbose_name = "Department"
     verbose_name_plural = "Departments"
 
-  def __str___(self):
+  def __str__(self):
     return self.DepartmentName
   
 #Instructor Model
@@ -52,7 +52,7 @@ class TimeTableMain(models.Model):
   
 #Course Name Model
 class CourseName(models.Model):
-  Course = models.CharField(max_length=5)
+  Course = models.CharField(max_length=255)
   CourseCode = models.CharField(max_length=100, primary_key=True)
   RegisteredDate = models.DateTimeField(auto_now_add=True)
   CourseDescription= models.CharField(max_length=200)

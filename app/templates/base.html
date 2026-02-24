@@ -1,0 +1,22 @@
+{% extends 'admin/base.html' %}
+{%load static %}
+{% block extrastyle %}
+
+
+
+<link rel="stylesheet" href="{% static 'fonts/fonts.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'dist/css/admin.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/overlayScrollbars/css/all.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+{% endblock %}
+{% block content %}
+    <!--Main Content-->
+    {% block main %}
+        <!--Your main content here-->
+    {% endblock %}
+
+{% endblock %}
