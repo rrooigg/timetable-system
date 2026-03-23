@@ -2,112 +2,231 @@
 {% load static %}
 
 {% block content %}
-{% block main %}
 
-<div class="container">
-  <div class="card card-outline border-secondary p-2">
-    <div class="card-body">
-      <h4 class="text-info">Select Programmer, Semester and Year Of Study</h4>
-      <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="programme">Programme</label>
-          <select name="programme" id="programme" class="form-control" required>
-            <option value="" disabled selected>Select Programme</option>
-            {% for programme in programmes %}
-              <option>{{ programme }}</option>
-            {% endfor %}
-          </select>
+{% if timetable_data %}
 
-        </div>
-        <div class="form-group">
-          <label for="semester">Semester</label>
-          <select name="semester" id="semester" class="form-control" required>
-            <option value="" disabled selected>Semester</option>
-            {% for semester in semesters %}
-              <option>{{ semester }}</option>
-            {% endfor %}
-          </select>
-
-        </div>
-          <div class="form-group">
-          <label for="year_of_study">Year Of Study</label>
-          <select name="year_of_study" id="year_of_study" class="form-control" required>
-            <option value="" disabled selected>Year Of Study</option>
-            {% for year_of_study in years_of_study %}
-              <option>{{ year_of_study }}</option>
-            {% endfor %}
-          </select>
-
-        </div>
-        <button type="submit" class="btn btn-dark mt-3">Search</button>
-      </form>
-
-    </div>
-
+<!-- ── TIMETABLE RESULTS PAGE ──────────────────────────── -->
+<div class="bc-bar">
+  <div class="bc-left">Student Timetable</div>
+  <div class="bc-right">
+    <a href="/">Dashboard</a>
+    <span class="bsep">›</span>
+    <span>Student Timetable</span>
   </div>
-  <style>
-    #card{
-      overflow: auto;
-      width: 100%;
-    }
-    #today-table{
-      overflow: auto;
-      width: 100%;
-    }
-  </style>
+</div>
 
-  <!--Button to download button-->
-  {% if timetable_data %}
-    <div class="mb-3">
-      <a href="{% url 'export_pdf' %}?programme={{ selected_programme }}&semester={{ semester }}&year_of_study={{ year_of_study }}" 
-        class="btn btn-success">
-        <i class="fas fa-file-download"></i> Download PDF
-      </a>
+<div class="pg-body">
+
+  <!-- Meta row -->
+  <div class="tt-meta">
+    <div class="mi">
+      <label>Programme</label>
+      <span class="grn">{{ selected_programme }}</span>
     </div>
-  {% endif %}
+    <div class="mi">
+      <label>Semester</label>
+      <span>{{ semester }}</span>
+    </div>
+    <div class="mi">
+      <label>Year</label>
+      <span>{{ year_of_study }}</span>
+    </div>
+  </div>
 
-  <table id="today_table" class="table table-bordered border table-hover w-100 text-dark">
-    <thead>
-      <tr>
-        <th colspan="10">Days:
-          {% for day in timetable_data %}
-            {{ day }}
-          {% endfor %}
-        </th>
-      </tr>
-      <tr>
-        <th>Day</th>
-        <th>Course Name</th>
-        <th>Course Code</th>
-        <th>Instructor</th>
-        <th>Venue</th>
-        <th>Time Start</th>
-        <th>Time End</th>
-        <th colspan="2">Course Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for day, entries in timetable_data.items %}
-      {% for entry in entries %}
+  <!-- Download button -->
+  <a href="{% url 'export_pdf' %}?programme={{ selected_programme }}&semester={{ semester }}&year_of_study={{ year_of_study }}"
+     class="btn-dl">
+    <i class="fa-solid fa-file-arrow-down"></i> Download PDF
+  </a>
+
+  <!-- Table -->
+  <div class="tt-wrap">
+    <table class="tt-tbl">
+      <thead>
         <tr>
-          {% if forloop.first %}
-          <td rowspan="{{ entries|length }}"><span class="badge badge-dark p-2 text-white">{{day}}</span></td>
-          {% endif %}
-          <td>{{ entry.courseName.Course}}</td>
-          <td>{{ entry.courseName.CourseCode}}</td>
-          <td>{{ entry.instructor.username}}</td>
-          <td>{{ entry.venue}}</td>
-          <td>{{ entry.TimeStart}}</td>
-          <td>{{ entry.TimeEnd}}</td>
-          <td>{{ entry.courseName.CourseDescription }}</td>
+          <th>Day</th>
+          <th>Course Name</th>
+          <th>Course Code</th>
+          <th>Instructor</th>
+          <th>Venue</th>
+          <th>Time Start</th>
+          <th>Time End</th>
+          <th>Description</th>
+          <th></th>
         </tr>
-      {% endfor %}
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for day, entries in timetable_data.items %}
+          {% for entry in entries %}
+          <tr>
+            {% if forloop.first %}
+            <td rowspan="{{ entries|length }}" class="c-day" style="vertical-align:middle;">{{ day }}</td>
+            {% endif %}
+            <td class="c-name">{{ entry.courseName.Course }}</td>
+            <td>{{ entry.courseName.CourseCode }}</td>
+            <td class="c-inst">{{ entry.instructor.FirstName }} {{ entry.instructor.LastName }}</td>
+            <td class="c-venue">{{ entry.venue }}</td>
+            <td class="c-time">{{ entry.TimeStart }}</td>
+            <td class="c-time">{{ entry.TimeEnd }}</td>
+            <td class="c-desc">{{ entry.courseName.CourseDescription }}</td>
+            <td><button class="btn-view">View</button></td>
+          </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
 </div>
 
-{% endblock %}
+{% else %}
+
+<!-- ── DASHBOARD PAGE ──────────────────────────────────── -->
+<div class="bc-bar">
+  <div class="bc-left">Dashboard <span class="sep">|</span> Quick Links</div>
+  <div class="bc-right">
+    <a href="/">Student</a>
+    <span class="bsep">›</span>
+    <span>Dashboard</span>
+  </div>
+</div>
+
+<div class="pg-body">
+
+  <!-- Alert banner -->
+  <div class="dash-alert">
+    <div class="al-meta"><i class="fa-regular fa-calendar-xmark" style="color:#c0392b;margin-right:4px;"></i>Unit registration deadline has been extended to</div>
+    <div class="al-date">{{ monday }} &bull; 23:59</div>
+    <div class="al-badge">Current Week</div>
+    <div class="al-sub">Timetable is for the week {{ monday }} – {{ friday }}</div>
+  </div>
+
+  <!-- ── Quick Links row 1 ── -->
+  <div class="card-grid">
+    <a href="#" class="d-card" data-bs-toggle="modal" data-bs-target="#ttModal">
+      <div class="dc-title">Timetable</div>
+      <i class="fa-solid fa-calendar-days dc-icon"></i>
+    </a>
+    <a href="#" class="d-card">
+      <div class="dc-title">Course Status</div>
+      <i class="fa-solid fa-book-open dc-icon"></i>
+    </a>
+    <a href="#" class="d-card">
+      <div class="dc-title">Semester Registration</div>
+      <i class="fa-solid fa-graduation-cap dc-icon"></i>
+    </a>
+    <a href="#" class="d-card">
+      <div class="dc-title">Fee Statement</div>
+      <i class="fa-solid fa-database dc-icon"></i>
+    </a>
+  </div>
+
+  <!-- ── Quick Links row 2 ── -->
+  <div class="card-grid">
+    <a href="#" class="d-card">
+      <div class="dc-title">Exam Results</div>
+      <i class="fa-solid fa-graduation-cap dc-icon"></i>
+    </a>
+    <a href="#" class="d-card">
+      <div class="dc-title">Academic Calender</div>
+      <i class="fa-solid fa-calendar dc-icon"></i>
+    </a>
+    <a href="#" class="d-card">
+      <div class="dc-title">Help Desk</div>
+      <i class="fa-solid fa-headset dc-icon"></i>
+    </a>
+    <a href="#" class="d-card">
+      <div class="dc-title">Notifications</div>
+      <i class="fa-solid fa-comment-dots dc-icon"></i>
+    </a>
+  </div>
+
+  <!-- ── Quick Links row 3 (Notifications + Student Profile) ── -->
+  <div class="card-grid" style="margin-top:8px;">
+    <a href="#" class="d-card" data-bs-toggle="modal" data-bs-target="#ttModal">
+      <div class="dc-title">Timetable</div>
+      <i class="fa-solid fa-calendar-days dc-icon"></i>
+    </a>
+    <a href="#" class="d-card">
+      <div class="dc-title">Student Profile</div>
+      <i class="fa-solid fa-user-gear dc-icon"></i>
+    </a>
+    <div></div>
+    <div></div>
+  </div>
+
+  <!-- ── Others ── -->
+  <span class="sec-label" style="margin-top:14px; display:block;">Others</span>
+
+  <div class="card-grid">
+    <a href="#" class="d-card">
+      <div class="dc-title">Apply Deferment/Leaves</div>
+      <i class="fa-solid fa-calendar-xmark dc-icon"></i>
+    </a>
+    <a href="#" class="d-card">
+      <div class="dc-title">Apply Readmission</div>
+      <i class="fa-solid fa-calendar-check dc-icon"></i>
+    </a>
+    <a href="#" class="d-card">
+      <div class="dc-title">Supplementary/Specials/Retakes</div>
+      <i class="fa-solid fa-file-circle-plus dc-icon"></i>
+    </a>
+    <a href="#" class="d-card">
+      <div class="dc-title">Apply Retakes</div>
+      <i class="fa-solid fa-rotate-right dc-icon"></i>
+    </a>
+  </div>
+
+</div>
+
+<!-- ══ TIMETABLE MODAL ════════════════════════════════════ -->
+<div class="modal fade" id="ttModal" tabindex="-1" aria-labelledby="ttModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 390px;">
+    <div class="modal-content">
+      <div class="modal-hdr">
+        <span class="m-title" id="ttModalLabel">Select Your Timetable</span>
+        <button type="button" class="btn-close" style="font-size:11px;" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" action="/">
+        {% csrf_token %}
+        <div class="modal-bd">
+          <div class="mb-3">
+            <label class="ml-lbl" for="programme">Programme</label>
+            <select name="programme" id="programme" class="ml-sel" required>
+              <option value="" disabled selected>Select Programme</option>
+              {% for prog in programmes %}
+              <option value="{{ prog }}">{{ prog }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="ml-lbl" for="semester">Semester</label>
+            <select name="semester" id="semester" class="ml-sel" required>
+              <option value="" disabled selected>Select Semester</option>
+              {% for sem in semesters %}
+              <option value="{{ sem }}">Semester {{ sem }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="ml-lbl" for="year_of_study">Year of Study</label>
+            <select name="year_of_study" id="year_of_study" class="ml-sel" required>
+              <option value="" disabled selected>Select Year</option>
+              {% for yr in years_of_study %}
+              <option value="{{ yr }}">{{ yr }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="modal-ftr">
+          <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn-go">Search Timetable</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
 {% endblock %}
